@@ -2,20 +2,19 @@
 
 public class SimonSaysTile : MonoBehaviour
 {
-    [SerializeField] private SimonSaysController controller;
-    [SerializeField] private Color highColor;
-    [SerializeField] private Color lowColor;
-    [SerializeField] private Color baseColor;
-    private SpriteRenderer renderer;
+    [SerializeField] private SimonSaysController controller = null;
+    [SerializeField] private Color highColor = new Color();
+    [SerializeField] private Color baseColor = new Color();
+    private SpriteRenderer sr;
 
     private void Awake() 
     {
-        renderer = GetComponent<SpriteRenderer>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     public void UpdateColor(bool active)
 	{
-        renderer.color = active ? highColor : baseColor;
+        sr.color = active ? highColor : baseColor;
 	}
 
     private void OnMouseDown()
@@ -25,23 +24,6 @@ public class SimonSaysTile : MonoBehaviour
 
     public void SwitchTile(bool state)
 	{
-        renderer.enabled = state;
+        sr.enabled = state;
 	}
-
-	//private void OnMouseUp()
-	//{
- //       if (controller.SequencePlaying) return;
- //       renderer.color = baseColor;
-	//}
-
-	//private void OnMouseEnter()
-	//{
- //       if (controller.SequencePlaying) return;
- //       renderer.color = lowColor;
-	//}
-
-	//private void OnMouseExit()
-	//{
- //       renderer.color = baseColor;
-	//}
 }
