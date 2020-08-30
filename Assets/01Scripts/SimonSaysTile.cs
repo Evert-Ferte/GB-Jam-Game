@@ -1,19 +1,36 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SimonSaysTile : MonoBehaviour
 {
-    public SimonSaysController controller;
+    [SerializeField] private SimonSaysController controller;
+    [SerializeField] private Color highColor;
+    [SerializeField] private Color lowColor;
+    [SerializeField] private Color baseColor;
     private SpriteRenderer renderer;
 
     private void Awake() 
     {
-        renderer = GetComponent<SpriteRenderer>();    
+        renderer = GetComponent<SpriteRenderer>();
     }
 
-    private void OnMouseDown() 
+    public void UpdateColor(bool active)
+	{
+        renderer.color = active ? highColor : lowColor;
+	}
+
+    private void OnMouseDown()
     {
-        controller.TileClicked(renderer);
+        controller.OnTileClicked?.Invoke(this);
     }
+
+	private void OnMouseEnter()
+	{
+        if (controller.SequencePlaying) return;
+        renderer.color = lowColor;
+	}
+
+	private void OnMouseExit()
+	{
+        renderer.color = baseColor;
+	}
 }
