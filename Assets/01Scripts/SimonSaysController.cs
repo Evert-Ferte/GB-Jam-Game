@@ -7,10 +7,10 @@ public class SimonSaysController : MonoBehaviour
 	public System.Action<SimonSaysTile> OnTileClicked;
 
 	[SerializeField] private List<SimonSaysTile> tiles = new List<SimonSaysTile>();
-	[SerializeField] private int maxSequence;
+	[SerializeField] private int maxSequence = 0;
 	private List<SimonSaysTile> gameSequence = new List<SimonSaysTile>();
 	public bool SequencePlaying { get; private set; }
-	private int sequenceID;
+	private int sequenceID = 0;
 
 	private void OnEnable() => OnTileClicked += TileClicked;
 	private void OnDisable() => OnTileClicked -= TileClicked;
