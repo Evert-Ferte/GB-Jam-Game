@@ -15,7 +15,7 @@ public class SimonSaysTile : MonoBehaviour
 
     public void UpdateColor(bool active)
 	{
-        renderer.color = active ? highColor : lowColor;
+        renderer.color = active ? highColor : baseColor;
 	}
 
     private void OnMouseDown()
@@ -23,14 +23,25 @@ public class SimonSaysTile : MonoBehaviour
         controller.OnTileClicked?.Invoke(this);
     }
 
-	private void OnMouseEnter()
+    public void SwitchTile(bool state)
 	{
-        if (controller.SequencePlaying) return;
-        renderer.color = lowColor;
+        renderer.enabled = state;
 	}
 
-	private void OnMouseExit()
-	{
-        renderer.color = baseColor;
-	}
+	//private void OnMouseUp()
+	//{
+ //       if (controller.SequencePlaying) return;
+ //       renderer.color = baseColor;
+	//}
+
+	//private void OnMouseEnter()
+	//{
+ //       if (controller.SequencePlaying) return;
+ //       renderer.color = lowColor;
+	//}
+
+	//private void OnMouseExit()
+	//{
+ //       renderer.color = baseColor;
+	//}
 }

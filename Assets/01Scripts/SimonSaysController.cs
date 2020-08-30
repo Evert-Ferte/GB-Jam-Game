@@ -8,26 +8,53 @@ public class SimonSaysController : MonoBehaviour
 
 	[SerializeField] private List<SimonSaysTile> tiles = new List<SimonSaysTile>();
 	[SerializeField] private int maxSequence;
-	private List<int> gameSequence = new List<int>();
+	private List<SimonSaysTile> gameSequence = new List<SimonSaysTile>();
 	public bool SequencePlaying { get; private set; }
 	private int sequenceID;
 
-	/// <summary>
-	/// Executes at the Start
-	/// </summary>
+	private void OnEnable() => OnTileClicked += TileClicked;
+	private void OnDisable() => OnTileClicked -= TileClicked;
+
 	private void Start()
 	{
-		OnTileClicked += TileClicked;
+		AddToSequence();
 	}
 
 	private void TileClicked(SimonSaysTile tile) 
 	{
 		if (SequencePlaying) return;
+		if (tile != gameSequence[sequenceID]) // Wrong tile has been pressed.
+		{
+			StartCoroutine(ResetSequence());
+		}
+		else // Correct tile has been pressed.
+		{
+			if (sequenceID == gameSequence.Count -1)	// Player pressed the last tile in the sequence.
+			{
+				if (gameSequence.Count < maxSequence)   // The sequence has not reached its final size.
+				{
+					sequenceID = 0;
+					AddToSequence();
+				}
+
+				else
+				{
+					// Game Finished!
+					Debug.Log("Game Finished!");
+					Debug.Break();
+				}
+			}
+			else
+			{
+				sequenceID++;
+			}
+		}
 	}
 
 	private void AddToSequence()
 	{
-		gameSequence.Add(Random.Range(0, 4));
+		SimonSaysTile newTile = tiles[Random.Range(0, 4)];
+		gameSequence.Add(newTile);
 		StartCoroutine(ShowSequence());
 	}
 
@@ -42,11 +69,33 @@ public class SimonSaysController : MonoBehaviour
 		for (int i = 0; i < gameSequence.Count; i++)
 		{
 			yield return new WaitForSeconds(.5f);
-			tiles[gameSequence[i]].UpdateColor(true);
+			gameSequence[i].UpdateColor(true);
 			yield return new WaitForSeconds(.5f);
-			tiles[gameSequence[i]].UpdateColor(false);
+			gameSequence[i].UpdateColor(false);
 		}
 
+		SequencePlaying = false;
+	}
+
+	private IEnumerator ResetSequence()
+	{
+		SequencePlaying = true;
+		for (int x = 0; x < 3; x++)
+		{
+			for (int y = 0; y < tiles.Count; y++)
+			{
+				tiles[y].SwitchTile(false);
+			}
+			yield return new WaitForSeconds(.15f);
+			for (int z = 0; z < tiles.Count; z++)
+			{
+				tiles[z].SwitchTile(true);
+			}
+			yield return new WaitForSeconds(.15f);
+		}
+		sequenceID = 0;
+		gameSequence = new List<SimonSaysTile>();   // Empty the sequence.
+		AddToSequence();                            // Start a new sequence.
 		SequencePlaying = false;
 	}
 }
