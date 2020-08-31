@@ -32,7 +32,7 @@ namespace Game.Terminal {
         }
 
         private IEnumerator TextAnimator(string text) {
-            float timePerCharacter = 0.01f;
+            float timePerCharacter = 0.05f;
             int characterIndex = 0;
             
             // Loop until all characters are shown
