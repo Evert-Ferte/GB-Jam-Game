@@ -33,9 +33,8 @@ namespace Game.Terminal {
             }
         }
 
-        public void AddLine(string newLine, float waitTime) {
-            // AddLine(new []{newLine}, waitTime);
-            jobQueue.Add(new Job(newLine, waitTime));
+        public void AddLine(string newLine, float waitTime, UnityEvent lineEvent = null) {
+            jobQueue.Add(new Job(newLine, waitTime, lineEvent));
             NewLine(jobQueue[0]);
         }
 
@@ -65,6 +64,9 @@ namespace Game.Terminal {
             // Add an event listener to the animation event, when completed, add the next line in the job queue
             animationEvent.AddListener(() => {
                 isWorking = false;
+
+                lineJob.lineEvent?.Invoke();
+
                 if (jobQueue.Count > 0) {
                     UnityEvent finishEvent = new UnityEvent();
                     finishEvent.AddListener(() => NewLine(jobQueue[0]));
@@ -108,7 +110,6 @@ namespace Game.Terminal {
                 // Remove and destroy the current line if it's outside of the canvas
                 if (line.anchoredPosition.y >= lineHolderHeight ||
                     line.anchoredPosition.y < (lineHolderHeight % 45) - 45) {
-                    Debug.Log("remove. " + line.anchoredPosition.y + " & " + lineHolderHeight);
                     indicesToRemove.Add(i);
                     Destroy(line.gameObject);
                 }
@@ -129,14 +130,16 @@ namespace Game.Terminal {
     }
 
     class Job {
-        public string text = "";
-        public float waitTime = 0;
+        public string text;
+        public float waitTime;
+        public UnityEvent lineEvent;
 
         public Job() { }
 
-        public Job(string text, float waitTime) {
+        public Job(string text, float waitTime, UnityEvent lineEvent) {
             this.text = text;
             this.waitTime = waitTime;
+            this.lineEvent = lineEvent;
         }
     }
 }
