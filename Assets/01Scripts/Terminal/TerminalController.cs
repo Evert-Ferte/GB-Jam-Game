@@ -13,16 +13,15 @@ namespace Game.Terminal {
         private List<RectTransform> lineBuffer = new List<RectTransform>();
 
         private int lineCounter = 0;
-        private readonly float lineHolderHeight = 537;
 
         private bool isWorking = false;
         private List<Job> jobQueue = new List<Job>();
-
-        private LetterConverter letterConverter;
+        
+        private readonly float lineHolderHeight = 80;
+        private float lineHeight;
 
         private void Start() {
-            // lineHolderHeight = lineHolder.GetComponent<RectTransform>().rect.height;
-            // lineHolderHeight = 537;
+            lineHeight = terminalTextLinePrefab.GetComponent<RectTransform>().rect.height;
         }
 
         private void Update() {
@@ -33,9 +32,8 @@ namespace Game.Terminal {
             }
         }
 
-        public void AddLine(string newLine, float waitTime) {
-            // AddLine(new []{newLine}, waitTime);
-            jobQueue.Add(new Job(newLine, waitTime));
+        public void AddLine(string newLine, float waitTime, UnityEvent lineEvent = null) {
+            jobQueue.Add(new Job(newLine, waitTime, lineEvent));
             NewLine(jobQueue[0]);
         }
 
@@ -65,6 +63,9 @@ namespace Game.Terminal {
             // Add an event listener to the animation event, when completed, add the next line in the job queue
             animationEvent.AddListener(() => {
                 isWorking = false;
+
+                lineJob.lineEvent?.Invoke();
+
                 if (jobQueue.Count > 0) {
                     UnityEvent finishEvent = new UnityEvent();
                     finishEvent.AddListener(() => NewLine(jobQueue[0]));
@@ -89,7 +90,7 @@ namespace Game.Terminal {
             // Loop through all lines in the line buffer
             foreach (RectTransform line in lineBuffer) {
                 // Get and set the position of the current line based on the position in the line buffer
-                float yPos = (textFromBottom ? (45 * i - 45) : lineHolderHeight - 45 - 45 * i + 45);
+                float yPos = (textFromBottom ? (lineHeight * i - lineHeight) : lineHolderHeight - lineHeight - lineHeight * i + lineHeight);
                 line.anchoredPosition = Vector2.up * yPos;
                 i--;
             }
@@ -107,8 +108,7 @@ namespace Game.Terminal {
             foreach (RectTransform line in lineBuffer) {
                 // Remove and destroy the current line if it's outside of the canvas
                 if (line.anchoredPosition.y >= lineHolderHeight ||
-                    line.anchoredPosition.y < (lineHolderHeight % 45) - 45) {
-                    Debug.Log("remove. " + line.anchoredPosition.y + " & " + lineHolderHeight);
+                    line.anchoredPosition.y < (lineHolderHeight % lineHeight) - lineHeight) {
                     indicesToRemove.Add(i);
                     Destroy(line.gameObject);
                 }
@@ -129,14 +129,16 @@ namespace Game.Terminal {
     }
 
     class Job {
-        public string text = "";
-        public float waitTime = 0;
+        public string text;
+        public float waitTime;
+        public UnityEvent lineEvent;
 
         public Job() { }
 
-        public Job(string text, float waitTime) {
+        public Job(string text, float waitTime, UnityEvent lineEvent) {
             this.text = text;
             this.waitTime = waitTime;
+            this.lineEvent = lineEvent;
         }
     }
 }

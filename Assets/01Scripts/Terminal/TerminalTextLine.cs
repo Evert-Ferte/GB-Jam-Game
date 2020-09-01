@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Game.Terminal {
     public class TerminalTextLine : MonoBehaviour {
-        public Text lineNumber;
-        public Text lineText;
+        public TextMeshProUGUI lineNumber;
+        public TextMeshProUGUI lineText;
 
         private float timer = 0;
 
