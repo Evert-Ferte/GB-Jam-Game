@@ -1,29 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class SimonSaysTile : MonoBehaviour
 {
-    [SerializeField] private SimonSaysController controller = null;
-    [SerializeField] private Color highColor = new Color();
-    [SerializeField] private Color baseColor = new Color();
-    private SpriteRenderer sr;
+    [SerializeField] private Sprite onSprite = null;
+    [SerializeField] private Sprite offSprite = null;
+    private Image image;
 
-    private void Awake() 
-    {
-        sr = GetComponent<SpriteRenderer>();
-    }
-
-    public void UpdateColor(bool active)
-	{
-        sr.color = active ? highColor : baseColor;
-	}
-
-    private void OnMouseDown()
-    {
-        controller.OnTileClicked?.Invoke(this);
-    }
-
-    public void SwitchTile(bool state)
-	{
-        sr.enabled = state;
-	}
+    private void Awake() => image = GetComponent<Image>();
+    public void UpdateColor(bool active) => image.sprite = active ? onSprite : offSprite;
+    public void SwitchTile(bool state) => image.enabled = state;
 }

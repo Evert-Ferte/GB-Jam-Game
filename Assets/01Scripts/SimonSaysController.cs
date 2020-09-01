@@ -5,24 +5,21 @@ using UnityEngine;
 
 public class SimonSaysController : MonoBehaviour
 {
-	public System.Action<SimonSaysTile> OnTileClicked;
-
 	[SerializeField] private List<SimonSaysTile> tiles = new List<SimonSaysTile>();
 	[SerializeField] private int maxSequence = 0;
 	private List<SimonSaysTile> gameSequence = new List<SimonSaysTile>();
 	public bool SequencePlaying { get; private set; }
 	private int sequenceID = 0;
 
-	private void OnEnable() => OnTileClicked += TileClicked;
-	private void OnDisable() => OnTileClicked -= TileClicked;
-
 	private void Start()
 	{
 		AddToSequence();
 	}
 
-	private void TileClicked(SimonSaysTile tile) 
+	public void TileClicked(int id) 
 	{
+		SimonSaysTile tile = tiles[id];
+
 		if (SequencePlaying) return;
 		if (tile != gameSequence[sequenceID]) // Wrong tile has been pressed.
 		{
