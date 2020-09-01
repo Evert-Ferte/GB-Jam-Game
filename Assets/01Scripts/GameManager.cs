@@ -21,7 +21,7 @@ namespace Game {
             "Eleventh", "Twelfth", "Thirteenth", "Fourteenth", "Fifteenth", "Sixteenth", "Seventeenth", "Eighteenth", "Nineteenth", "Twentieth",
         };
 
-        private int codeLength = 8;
+        private int codeLength = 3;
         private int puzzleCounter = 0;
 
         private string code;
@@ -59,9 +59,9 @@ namespace Game {
             terminalController.AddLine(" ", 1);
             terminalController.AddLine("Good luck", 1);
             terminalController.AddLine("God speed", 2);
-            terminalController.AddLine(" ", 0.2f);
-            terminalController.AddLine(" ", 0.2f);
-            terminalController.AddLine(" ", 0.2f);
+            terminalController.AddLine(" ", 0.1f);
+            terminalController.AddLine(" ", 0.1f);
+            terminalController.AddLine(" ", 0.1f);
             terminalController.AddLine("M A S T E R   C O D E", 1);
             terminalController.AddLine(GetCode(), 0);
             
@@ -97,7 +97,7 @@ namespace Game {
             terminalController.AddLine("Description: " + nextPuzzle.description, 2);
             
             // Show a countdown
-            terminalController.AddLine(" ", 0.2f);
+            terminalController.AddLine(" ", 0.1f);
             terminalController.AddLine("Ready?", 3);
             terminalController.AddLine("3", 1);
             terminalController.AddLine("2", 1);
@@ -109,16 +109,39 @@ namespace Game {
         /// When called, dialog for when a puzzle has been completed will be shown. Depending on how many puzzles have
         /// been completed, the corresponding code will be shown.
         /// </summary>
-        private void PuzzleEnd() {
+        public void PuzzleEnd(GameObject puzzleObject) {
+            // Destroy the puzzle and show the terminal
+            terminalController.gameObject.SetActive(true);
+            Destroy(puzzleObject);
+            
+            // Show some spaces first
+            terminalController.AddLine(" ", 0.1f);
+            terminalController.AddLine(" ", 0.1f);
+            terminalController.AddLine(" ", 0.1f);
+            
             // Show the dialog for when a puzzle has been completed
             terminalController.AddLine("Excellent", 0.5f);
             terminalController.AddLine("You managed to solve the puzzle", 0.5f);
             terminalController.AddLine("Let's take a look at our code fragment", 2);
             terminalController.AddLine("...", 2);
+            terminalController.AddLine(" ", 0.1f);
             
             // Show the master code
             terminalController.AddLine("M A S T E R   C O D E", 1);
             terminalController.AddLine(GetCode(), 0);
+
+            // If the code is not completed, show the dialog for the start of the next puzzle
+            if (puzzleCounter < codeLength) {
+                NextPuzzle();
+                return;
+            }
+            
+            GameEnd();
+        }
+
+        private void GameEnd() {
+            terminalController.AddLine(" ", 0.1f);
+            terminalController.AddLine("GAME END - SOME COOL STORY DIALOG HERE", 0.5f);
         }
         
         /// <summary>

@@ -13,14 +13,15 @@ namespace Game.Terminal {
         private List<RectTransform> lineBuffer = new List<RectTransform>();
 
         private int lineCounter = 0;
-        private readonly float lineHolderHeight = 537;
 
         private bool isWorking = false;
         private List<Job> jobQueue = new List<Job>();
-
-        private LetterConverter letterConverter;
+        
+        private readonly float lineHolderHeight = 537;    //TODO - change
+        private float lineHeight;
 
         private void Start() {
+            lineHeight = terminalTextLinePrefab.GetComponent<RectTransform>().rect.height;
             // lineHolderHeight = lineHolder.GetComponent<RectTransform>().rect.height;
             // lineHolderHeight = 537;
         }
@@ -91,7 +92,7 @@ namespace Game.Terminal {
             // Loop through all lines in the line buffer
             foreach (RectTransform line in lineBuffer) {
                 // Get and set the position of the current line based on the position in the line buffer
-                float yPos = (textFromBottom ? (45 * i - 45) : lineHolderHeight - 45 - 45 * i + 45);
+                float yPos = (textFromBottom ? (lineHeight * i - lineHeight) : lineHolderHeight - lineHeight - lineHeight * i + lineHeight);
                 line.anchoredPosition = Vector2.up * yPos;
                 i--;
             }
@@ -109,7 +110,7 @@ namespace Game.Terminal {
             foreach (RectTransform line in lineBuffer) {
                 // Remove and destroy the current line if it's outside of the canvas
                 if (line.anchoredPosition.y >= lineHolderHeight ||
-                    line.anchoredPosition.y < (lineHolderHeight % 45) - 45) {
+                    line.anchoredPosition.y < (lineHolderHeight % lineHeight) - lineHeight) {
                     indicesToRemove.Add(i);
                     Destroy(line.gameObject);
                 }

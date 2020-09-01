@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
 public class SimonSaysController : MonoBehaviour
@@ -41,7 +42,9 @@ public class SimonSaysController : MonoBehaviour
 				{
 					// Game Finished!
 					Debug.Log("Game Finished!");
-					Debug.Break();
+					// Debug.Break();
+
+					FindObjectOfType<GameManager>().PuzzleEnd(this.gameObject);
 				}
 			}
 			else
