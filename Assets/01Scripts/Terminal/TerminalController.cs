@@ -17,13 +17,11 @@ namespace Game.Terminal {
         private bool isWorking = false;
         private List<Job> jobQueue = new List<Job>();
         
-        private readonly float lineHolderHeight = 537;    //TODO - change
+        private readonly float lineHolderHeight = 80;
         private float lineHeight;
 
         private void Start() {
             lineHeight = terminalTextLinePrefab.GetComponent<RectTransform>().rect.height;
-            // lineHolderHeight = lineHolder.GetComponent<RectTransform>().rect.height;
-            // lineHolderHeight = 537;
         }
 
         private void Update() {
