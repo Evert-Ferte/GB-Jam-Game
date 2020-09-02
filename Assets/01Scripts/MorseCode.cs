@@ -1,16 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MorseCode : MonoBehaviour
 {
 	[Header("No spaces here please...")]
 	[SerializeField] private string message = null;
-	[SerializeField] private SpriteRenderer lightBulb = null;
+	[SerializeField] private Sprite lightBulbOn = null;
+	[SerializeField] private Sprite lightBulbOff = null;
+
+	private Image image;
 	private Dictionary<char, string> alphabet = new Dictionary<char, string>();
 
 	private void Start()
 	{
+		image = GetComponent<Image>();
 		EnterAlphabet();
 		message = message.ToLower();
 		StartCoroutine(ShowMorse());
@@ -48,6 +53,8 @@ public class MorseCode : MonoBehaviour
 
 	private IEnumerator ShowMorse() 
 	{
+		yield return new WaitForSeconds(1f);
+
 		char[] characters = message.ToCharArray();
 
 		while (true)
@@ -58,9 +65,9 @@ public class MorseCode : MonoBehaviour
 
 				foreach (char c2 in code)
 				{
-					lightBulb.enabled = true;
+					image.sprite = lightBulbOn;
 					yield return new WaitForSeconds(0.25f * BitDuration(c2));
-					lightBulb.enabled = false;
+					image.sprite = lightBulbOff;
 					yield return new WaitForSeconds(0.25f);
 				}
 
