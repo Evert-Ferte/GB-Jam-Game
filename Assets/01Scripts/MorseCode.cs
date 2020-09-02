@@ -9,16 +9,33 @@ public class MorseCode : MonoBehaviour
 	[SerializeField] private string message = null;
 	[SerializeField] private Sprite lightBulbOn = null;
 	[SerializeField] private Sprite lightBulbOff = null;
+	[SerializeField] private Image lightBulbImage = null;
+	[SerializeField] private Sprite translatorOn = null;
+	[SerializeField] private Sprite translatorOff = null;
+	[SerializeField] private Image translatorImage = null;
 
-	private Image image;
 	private Dictionary<char, string> alphabet = new Dictionary<char, string>();
 
-	private void Start()
+	IEnumerator DoMorse;
+
+	private void OnEnable() 
 	{
-		image = GetComponent<Image>();
-		EnterAlphabet();
+		if (alphabet.Count == 0) EnterAlphabet();
 		message = message.ToLower();
-		StartCoroutine(ShowMorse());
+		DoMorse = ShowMorse();
+		StartCoroutine(DoMorse);
+	}
+
+	private void OnDisable() 
+	{
+		StopCoroutine(DoMorse);
+		lightBulbImage.sprite = lightBulbOff;
+		translatorImage.sprite = translatorOff;
+	}
+
+	public void SwitchGameObject()
+	{
+		gameObject.SetActive(!gameObject.activeSelf);
 	}
 
 	private void EnterAlphabet()
@@ -65,9 +82,11 @@ public class MorseCode : MonoBehaviour
 
 				foreach (char c2 in code)
 				{
-					image.sprite = lightBulbOn;
+					lightBulbImage.sprite = lightBulbOn;
+					translatorImage.sprite = translatorOn;
 					yield return new WaitForSeconds(0.25f * BitDuration(c2));
-					image.sprite = lightBulbOff;
+					lightBulbImage.sprite = lightBulbOff;
+					translatorImage.sprite = translatorOff;
 					yield return new WaitForSeconds(0.25f);
 				}
 
