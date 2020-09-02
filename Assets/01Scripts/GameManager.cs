@@ -29,8 +29,7 @@ namespace Game {
         private void Start() {
             GenerateCode();
             
-            // PlayStartSequence();
-            NextPuzzle();
+            PlayStartSequence();
         }
 
         /// <summary>
