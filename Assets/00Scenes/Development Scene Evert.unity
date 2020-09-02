@@ -1062,6 +1062,7 @@ MonoBehaviour:
   puzzles:
   - {fileID: 11400000, guid: 7bc44404ec291e74f9656e8de7db12f2, type: 2}
   - {fileID: 11400000, guid: 1281e2b15fb770b44833d5c45f32d2a6, type: 2}
+  - {fileID: 11400000, guid: 3a28b64d1f60e504284f7ee0d141149a, type: 2}
   uiBasedPuzzleParent: {fileID: 909915603}
   nonUiBasedPuzzleParent: {fileID: 1445480981}
 --- !u!4 &1925680150
