@@ -698,7 +698,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 1
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -1061,6 +1061,7 @@ MonoBehaviour:
   terminalController: {fileID: 8981151708685762011}
   puzzles:
   - {fileID: 11400000, guid: 7bc44404ec291e74f9656e8de7db12f2, type: 2}
+  - {fileID: 11400000, guid: 1281e2b15fb770b44833d5c45f32d2a6, type: 2}
   uiBasedPuzzleParent: {fileID: 909915603}
   nonUiBasedPuzzleParent: {fileID: 1445480981}
 --- !u!4 &1925680150
@@ -1250,6 +1251,10 @@ PrefabInstance:
     - target: {fileID: 8981151708676089206, guid: 418582db1712d654b823a3e026c4588c, type: 3}
       propertyPath: m_Name
       value: Terminal Object
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981151708676089206, guid: 418582db1712d654b823a3e026c4588c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8981151708676089207, guid: 418582db1712d654b823a3e026c4588c, type: 3}
       propertyPath: m_LocalPosition.x

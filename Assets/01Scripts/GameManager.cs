@@ -83,10 +83,15 @@ namespace Game {
             onPuzzleStartEvent.AddListener(() => {
                 // Start the puzzle and hide the terminal
                 terminalController.gameObject.SetActive(false);
-        
-                GameObject puzzleObject = Instantiate(nextPuzzle.prefab);
-                bool isUiBased = puzzleObject.GetComponent<RectTransform>() != null;
-                puzzleObject.transform.SetParent(isUiBased ? uiBasedPuzzleParent : nonUiBasedPuzzleParent);
+
+                bool isUiBased = nextPuzzle.prefab.GetComponent<RectTransform>() != null;
+                
+                GameObject puzzleObject = Instantiate(nextPuzzle.prefab, isUiBased ? uiBasedPuzzleParent : nonUiBasedPuzzleParent);
+                
+                /*puzzleObject.transform.localScale = Vector3.one;
+                
+                if (isUiBased)
+                    puzzleObject.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;*/
             });
 
             // Show the puzzle number
