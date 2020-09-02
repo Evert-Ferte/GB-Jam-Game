@@ -1,27 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
 public class SimonSaysController : MonoBehaviour
 {
-	public System.Action<SimonSaysTile> OnTileClicked;
-
 	[SerializeField] private List<SimonSaysTile> tiles = new List<SimonSaysTile>();
-	[SerializeField] private int maxSequence;
+	[SerializeField] private int maxSequence = 0;
 	private List<SimonSaysTile> gameSequence = new List<SimonSaysTile>();
 	public bool SequencePlaying { get; private set; }
-	private int sequenceID;
-
-	private void OnEnable() => OnTileClicked += TileClicked;
-	private void OnDisable() => OnTileClicked -= TileClicked;
+	private int sequenceID = 0;
 
 	private void Start()
 	{
 		AddToSequence();
 	}
 
-	private void TileClicked(SimonSaysTile tile) 
+	public void TileClicked(int id) 
 	{
+		SimonSaysTile tile = tiles[id];
+
 		if (SequencePlaying) return;
 		if (tile != gameSequence[sequenceID]) // Wrong tile has been pressed.
 		{
@@ -41,7 +39,9 @@ public class SimonSaysController : MonoBehaviour
 				{
 					// Game Finished!
 					Debug.Log("Game Finished!");
-					Debug.Break();
+					// Debug.Break();
+
+					FindObjectOfType<GameManager>().PuzzleEnd(this.gameObject);
 				}
 			}
 			else
