@@ -15,4 +15,4 @@ MonoBehaviour:
   name: Morse Code
   description: Pay attention to the morse code and try to decipher it to finish the
     puzzle.
-  prefab: {fileID: 0}
+  prefab: {fileID: 5122812266763536015, guid: c2e082f51228ee648b5f906dab129310, type: 3}
