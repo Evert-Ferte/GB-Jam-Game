@@ -302,8 +302,8 @@ Camera:
   m_GameObject: {fileID: 263816891}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.16078432, g: 0.13725491, b: 0.09411765, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -320,7 +320,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 4.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1063,6 +1063,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7bc44404ec291e74f9656e8de7db12f2, type: 2}
   - {fileID: 11400000, guid: 1281e2b15fb770b44833d5c45f32d2a6, type: 2}
   - {fileID: 11400000, guid: 3a28b64d1f60e504284f7ee0d141149a, type: 2}
+  - {fileID: 11400000, guid: c2fff36685c19e54baa5b0f558bd5876, type: 2}
   uiBasedPuzzleParent: {fileID: 909915603}
   nonUiBasedPuzzleParent: {fileID: 1445480981}
 --- !u!4 &1925680150

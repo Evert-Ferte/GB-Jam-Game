@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 341a71823abd2cb468e1822a542b271c, type: 3}
+  m_Name: Hidden Maze
+  m_EditorClassIdentifier: 
+  name: Hidden Maze
+  description: Use WASD to find your way through the hidden maze.
+  prefab: {fileID: 921893427378934623, guid: 9027a0ea9a27e3149aafa0621e85ed4b, type: 3}
