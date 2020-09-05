@@ -13,6 +13,8 @@ namespace Game {
 
         [Space] public Transform uiBasedPuzzleParent;
         public Transform nonUiBasedPuzzleParent;
+        
+        [Space] public Animator screenFader;
 
         // Upgraded version: https://stackoverflow.com/questions/3213/convert-integers-to-written-numbers#3267
         // For numbers: https://stackoverflow.com/questions/20156/is-there-an-easy-way-to-create-ordinals-in-c
@@ -25,6 +27,8 @@ namespace Game {
         private int puzzleCounter = 0;
 
         private string code;
+
+        private UnityEvent onScreenFadedInEvent = new UnityEvent();
         
         private void Start() {
             GenerateCode();
@@ -79,21 +83,6 @@ namespace Game {
             int puzzleIndex = Random.Range(0, puzzles.Length);
             Puzzle nextPuzzle = puzzles[puzzleIndex];
 
-            UnityEvent onPuzzleStartEvent = new UnityEvent();
-            onPuzzleStartEvent.AddListener(() => {
-                // Start the puzzle and hide the terminal
-                terminalController.gameObject.SetActive(false);
-
-                bool isUiBased = nextPuzzle.prefab.GetComponent<RectTransform>() != null;
-                
-                GameObject puzzleObject = Instantiate(nextPuzzle.prefab, isUiBased ? uiBasedPuzzleParent : nonUiBasedPuzzleParent);
-                
-                /*puzzleObject.transform.localScale = Vector3.one;
-                
-                if (isUiBased)
-                    puzzleObject.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;*/
-            });
-
             // Show the puzzle number
             terminalController.AddLine(" ", 2);
             terminalController.AddLine(ConvertNumberToWrittenNumber(puzzleCounter) + " puzzle - " + nextPuzzle.name, 0.5f);
@@ -107,7 +96,24 @@ namespace Game {
             terminalController.AddLine("3", 1);
             terminalController.AddLine("2", 1);
             terminalController.AddLine("1", 1);
+            
+            UnityEvent onPuzzleStartEvent = new UnityEvent();
+            onPuzzleStartEvent.AddListener(FadeScreenIn);
+            onScreenFadedInEvent.AddListener(() => {
+                OnPuzzleStartEvent(nextPuzzle);
+            });
             terminalController.AddLine("0", 1, onPuzzleStartEvent);
+        }
+
+        private void OnPuzzleStartEvent(Puzzle nextPuzzle) {
+            // Hide the terminal
+            terminalController.gameObject.SetActive(false);
+            
+            // Check whether the should be spawn in the UI or not 
+            bool isUiBased = nextPuzzle.prefab.GetComponent<RectTransform>() != null;
+                
+            // Spawn the new puzzle prefab
+            Instantiate(nextPuzzle.prefab, isUiBased ? uiBasedPuzzleParent : nonUiBasedPuzzleParent);
         }
 
         /// <summary>
@@ -115,33 +121,39 @@ namespace Game {
         /// been completed, the corresponding code will be shown.
         /// </summary>
         public void PuzzleEnd(GameObject puzzleObject) {
-            // Destroy the puzzle and show the terminal
-            terminalController.gameObject.SetActive(true);
-            Destroy(puzzleObject);
+            // Play the fade in animation
+            FadeScreenIn();
             
-            // Show some spaces first
-            terminalController.AddLine(" ", 0.1f);
-            terminalController.AddLine(" ", 0.1f);
-            terminalController.AddLine(" ", 0.1f);
+            onScreenFadedInEvent.RemoveAllListeners();
+            onScreenFadedInEvent.AddListener(() => {
+                // Destroy the puzzle and show the terminal
+                terminalController.gameObject.SetActive(true);
+                Destroy(puzzleObject);
             
-            // Show the dialog for when a puzzle has been completed
-            terminalController.AddLine("Excellent", 0.5f);
-            terminalController.AddLine("You managed to solve the puzzle", 0.5f);
-            terminalController.AddLine("Let's take a look at our code fragment", 2);
-            terminalController.AddLine("...", 2);
-            terminalController.AddLine(" ", 0.1f);
+                // Show some spaces first
+                terminalController.AddLine(" ", 0.1f);
+                terminalController.AddLine(" ", 0.1f);
+                terminalController.AddLine(" ", 0.1f);
             
-            // Show the master code
-            terminalController.AddLine("M A S T E R   C O D E", 1);
-            terminalController.AddLine(GetCode(), 0);
+                // Show the dialog for when a puzzle has been completed
+                terminalController.AddLine("Excellent", 0.5f);
+                terminalController.AddLine("You managed to solve the puzzle", 0.5f);
+                terminalController.AddLine("Let's take a look at our code fragment", 2);
+                terminalController.AddLine("...", 2);
+                terminalController.AddLine(" ", 0.1f);
+            
+                // Show the master code
+                terminalController.AddLine("M A S T E R   C O D E", 1);
+                terminalController.AddLine(GetCode(), 0);
 
-            // If the code is not completed, show the dialog for the start of the next puzzle
-            if (puzzleCounter < codeLength) {
-                NextPuzzle();
-                return;
-            }
+                // If the code is not completed, show the dialog for the start of the next puzzle
+                if (puzzleCounter < codeLength) {
+                    NextPuzzle();
+                    return;
+                }
             
-            GameEnd();
+                GameEnd();
+            });
         }
 
         private void GameEnd() {
@@ -179,5 +191,43 @@ namespace Game {
             
             return ret;
         }
+
+#region Screen fader functions
+
+        /// <summary>
+        /// Starts the screen fade in animation.
+        /// </summary>
+        private void FadeScreenIn() {
+            screenFader.gameObject.SetActive(true);
+            screenFader.SetTrigger("Fade");
+        }
+
+        /// <summary>
+        /// Starts the screen fade out animation.
+        /// </summary>
+        private void FadeScreenOut() {
+            screenFader.SetTrigger("Fade");
+        }
+
+        public void OnScreenFadedIn(bool isFadingIn) {
+            // isFadingIn ? Fade in completed : Fade out started
+            if (!isFadingIn) return;
+            
+            // Invoke the onScreenFadedIn event
+            onScreenFadedInEvent.Invoke();
+
+            // Fade back out
+            FadeScreenOut();
+        }
+
+        public void OnScreenFadedOut(bool isFadingIn) {
+            // isFadingIn ? Fade in started : Fade out completed
+            if (isFadingIn) return;
+            
+            // Hide the screen fader
+            screenFader.gameObject.SetActive(false);
+        }
+
+#endregion
     }
 }
