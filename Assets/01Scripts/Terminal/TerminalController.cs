@@ -24,23 +24,34 @@ namespace Game.Terminal {
             lineHeight = terminalTextLinePrefab.GetComponent<RectTransform>().rect.height;
         }
 
-        private void Update() {
-            // TODO - check if text overflows, then add multiple lines instead of 1 long line
-            if (Input.GetKeyDown(KeyCode.Space)) {
-                AddLine("Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 0);
-                AddLine("Duis vitae sem sed ante sagittis egestas vitae hendrit.", 0);
-            }
-        }
-
+        /// <summary>
+        /// Adds a new line to the queue of lines to show on the terminal.
+        /// </summary>
+        /// <param name="newLine">The new line to be added.</param>
+        /// <param name="waitTime">The amount of time to wait after the line has been completed.</param>
+        /// <param name="lineEvent">Possible events to run after the line has been shown and the amount waited.</param>
         public void AddLine(string newLine, float waitTime, UnityEvent lineEvent = null) {
             jobQueue.Add(new Job(newLine, waitTime, lineEvent));
             NewLine(jobQueue[0]);
         }
 
         /// <summary>
+        /// Inserts a new line at the first position, instead of adding it to the last position in the queue. This line
+        /// will immediately be shown in the terminal. 
+        /// </summary>
+        /// <param name="newLine">The new line to be added.</param>
+        /// <param name="waitTime">the amount of time to wait after the line has been completed.</param>
+        /// <param name="lineEvent">Possible events to run after the line has been shown and the amount waited.</param>
+        public void ForceAddLine(string newLine, float waitTime, UnityEvent lineEvent = null) {
+            isWorking = false;
+            jobQueue.Insert(0, new Job(newLine, waitTime, lineEvent));
+            NewLine(jobQueue[0]);
+        }
+
+        /// <summary>
         /// Adds a new line into the terminal.
         /// </summary>
-        /// <param name="newLine">The line of text to show in the terminal.</param>
+        /// <param name="lineJob">The line of text to show in the terminal.</param>
         private void NewLine(Job lineJob) {
             // Return if already working on a line
             if (isWorking)
@@ -59,6 +70,7 @@ namespace Game.Terminal {
 
             // Set the line number and text attribute
             line.SetLineNumber(lineCounter);
+            line.SetLineWaitTime(lineJob.waitTime);
             UnityEvent animationEvent = line.SetLineText(lineJob.text);
             // Add an event listener to the animation event, when completed, add the next line in the job queue
             animationEvent.AddListener(() => {

@@ -18,12 +18,12 @@ namespace Game {
 
         // Upgraded version: https://stackoverflow.com/questions/3213/convert-integers-to-written-numbers#3267
         // For numbers: https://stackoverflow.com/questions/20156/is-there-an-easy-way-to-create-ordinals-in-c
-        private readonly string[] ordinalNumbers = new[] {
+        private readonly string[] ordinalNumbers = {
             "", "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth",
             "Eleventh", "Twelfth", "Thirteenth", "Fourteenth", "Fifteenth", "Sixteenth", "Seventeenth", "Eighteenth", "Nineteenth", "Twentieth",
         };
 
-        private int codeLength = 3;
+        private int codeLength = 4;
         private int puzzleCounter = 0;
 
         private string code;

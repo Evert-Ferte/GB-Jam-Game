@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Lights Puzzle
   m_EditorClassIdentifier: 
   name: Lights Puzzle
-  description: Complete the puzzle by getting al lights on.
+  description: Complete the puzzle by getting all lights on.
   prefab: {fileID: 6528268295493286387, guid: 182fe2570a27b334fb292b3f45c1fedd, type: 3}
