@@ -679,7 +679,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdce1294859c1234295ef3e718c84bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terminalController: {fileID: 8981151708685762011}
+  terminal: {fileID: 8981151708685762011}
   puzzles:
   - {fileID: 11400000, guid: 7bc44404ec291e74f9656e8de7db12f2, type: 2}
   - {fileID: 11400000, guid: 1281e2b15fb770b44833d5c45f32d2a6, type: 2}
