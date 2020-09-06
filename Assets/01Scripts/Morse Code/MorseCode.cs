@@ -13,6 +13,8 @@ public class MorseCode : MonoBehaviour
 	[SerializeField] private Sprite translatorOn = null;
 	[SerializeField] private Sprite translatorOff = null;
 	[SerializeField] private Image translatorImage = null;
+	[SerializeField] private float unitDuration = 0f;
+	[SerializeField] AudioSource audioSource = null;
 
 	private Dictionary<char, string> alphabet = new Dictionary<char, string>();
 
@@ -76,28 +78,30 @@ public class MorseCode : MonoBehaviour
 
 		while (true)
 		{
-			foreach (char c1 in characters)
+			foreach (char letter in characters)
 			{
-				char[] code = alphabet[c1].ToCharArray();
+				char[] morse = alphabet[letter].ToCharArray();
 
-				foreach (char c2 in code)
+				foreach (char digit in morse)
 				{
 					lightBulbImage.sprite = lightBulbOn;
 					translatorImage.sprite = translatorOn;
-					yield return new WaitForSeconds(0.25f * BitDuration(c2));
+					audioSource.clip = BeepBoop.GetTone(Mathf.FloorToInt(44000 * (unitDuration * DotOrDash(digit))), 44000, 880);
+					audioSource.Play();
+					yield return new WaitForSeconds(unitDuration * DotOrDash(digit));
 					lightBulbImage.sprite = lightBulbOff;
 					translatorImage.sprite = translatorOff;
-					yield return new WaitForSeconds(0.25f);
+					yield return new WaitForSeconds(unitDuration);
 				}
 
-				yield return new WaitForSeconds(0.75f);
+				yield return new WaitForSeconds(unitDuration * 3);
 			}
 
-			yield return new WaitForSeconds(1.75f);
+			yield return new WaitForSeconds(unitDuration * 7);
 		}
 	}
 
-	private int BitDuration(char letter) 
+	private int DotOrDash(char letter) 
 	{
 		switch (letter)
 		{
