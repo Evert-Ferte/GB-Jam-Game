@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.Events;
 
 namespace Game.Terminal {
+    [RequireComponent(typeof(AudioSource))]
     public class TerminalController : MonoBehaviour {
         public bool textFromBottom = true;
 
         [Space] public Transform lineHolder;
         public GameObject terminalTextLinePrefab;
+        public AudioClip typingSFX;
 
         private List<RectTransform> lineBuffer = new List<RectTransform>();
 
@@ -20,8 +22,11 @@ namespace Game.Terminal {
         private readonly float lineHolderHeight = 80;
         private float lineHeight;
 
+        private AudioController audioController;
+
         private void Start() {
             lineHeight = terminalTextLinePrefab.GetComponent<RectTransform>().rect.height;
+            audioController = FindObjectOfType<AudioController>();
         }
 
         /// <summary>
@@ -57,6 +62,10 @@ namespace Game.Terminal {
             if (isWorking)
                 return;
             isWorking = true;
+
+            // Play the typing audio
+            if (audioController)
+                audioController.Play(typingSFX, true);
             
             jobQueue.RemoveAt(0);
             lineCounter++;
@@ -75,6 +84,10 @@ namespace Game.Terminal {
             // Add an event listener to the animation event, when completed, add the next line in the job queue
             animationEvent.AddListener(() => {
                 isWorking = false;
+                
+                // Stop the typing audio
+                if (audioController)
+                    audioController.Stop();
 
                 lineJob.lineEvent?.Invoke();
 

@@ -1493,3 +1493,4 @@ MonoBehaviour:
   textFromBottom: 1
   lineHolder: {fileID: 6895915013784867124}
   terminalTextLinePrefab: {fileID: 6227581831767998222, guid: 0174abfe6fb06974281328e3cb2d1957, type: 3}
+  typingSFX: {fileID: 8300000, guid: 8068fcf84447f6649afbfd7f2c64ac8e, type: 3}
