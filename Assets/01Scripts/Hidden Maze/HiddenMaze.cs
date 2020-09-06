@@ -11,6 +11,7 @@ public class HiddenMaze : MonoBehaviour
     [SerializeField] private Sprite wrongSprite = null;
     [SerializeField] private Sprite finnishSprite = null;
     [SerializeField] private Sprite playerSprite = null;
+    [SerializeField] AudioSource audioSource = null;
 
     private Vector2 playerPosition = Vector2.zero;
     private Vector2 finnish = Vector2.zero;
@@ -75,6 +76,9 @@ public class HiddenMaze : MonoBehaviour
 
     private void UpdatePosition(Vector2 direction)
     {
+        audioSource.clip = BeepBoop.GetTone(5000, 44000, Mathf.FloorToInt(Random.Range(440, 550)));
+        audioSource.Play();
+
         tiles[(int)playerPosition.x, (int)playerPosition.y].sprite = defaultSprite;
         playerPosition += direction;
         playerPosition.x = Mathf.Clamp(playerPosition.x, 0, size.x - 1);
