@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 namespace Game {
     public class GameManager : MonoBehaviour {
-        public TerminalController terminalController;
+        public TerminalController terminal;
 
         [Space] public Puzzle[] puzzles;
 
@@ -18,12 +18,12 @@ namespace Game {
 
         // Upgraded version: https://stackoverflow.com/questions/3213/convert-integers-to-written-numbers#3267
         // For numbers: https://stackoverflow.com/questions/20156/is-there-an-easy-way-to-create-ordinals-in-c
-        private readonly string[] ordinalNumbers = new[] {
+        private readonly string[] ordinalNumbers = {
             "", "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth",
             "Eleventh", "Twelfth", "Thirteenth", "Fourteenth", "Fifteenth", "Sixteenth", "Seventeenth", "Eighteenth", "Nineteenth", "Twentieth",
         };
 
-        private int codeLength = 3;
+        private int codeLength = 4;
         private int puzzleCounter = 0;
 
         private string code;
@@ -52,22 +52,22 @@ namespace Game {
         /// </summary>
         private void PlayStartSequence() {
             // Starting dialog
-            terminalController.AddLine("...", 2);
-            terminalController.AddLine("...", 2);
-            terminalController.AddLine("...", 3);
-            terminalController.AddLine("I see you're finally awake", 0.5f);
-            terminalController.AddLine("It's been a while", 0.5f);
-            terminalController.AddLine("A lot happened while you were gone", 0.5f);
-            terminalController.AddLine("You better get going solving the master code", 0.5f);
-            terminalController.AddLine("You are our only hope ...", 0.5f);
-            terminalController.AddLine(" ", 1);
-            terminalController.AddLine("Good luck", 1);
-            terminalController.AddLine("God speed", 2);
-            terminalController.AddLine(" ", 0.1f);
-            terminalController.AddLine(" ", 0.1f);
-            terminalController.AddLine(" ", 0.1f);
-            terminalController.AddLine("M A S T E R   C O D E", 1);
-            terminalController.AddLine(GetCode(), 0);
+            terminal.AddLine("...", 2);
+            terminal.AddLine("...", 2);
+            terminal.AddLine("...", 3);
+            terminal.AddLine("I see you're finally awake", 0.5f);
+            terminal.AddLine("It's been a while", 0.5f);
+            terminal.AddLine("A lot happened while you were gone", 0.5f);
+            terminal.AddLine("You better get going solving the master code", 0.5f);
+            terminal.AddLine("You are our only hope ...", 2f);
+            terminal.AddLine(" ", 0.1f);
+            terminal.AddLine("Good luck", 1);
+            terminal.AddLine("God speed", 2);
+            terminal.AddLine(" ", 0.1f);
+            terminal.AddLine(" ", 0.1f);
+            terminal.AddLine(" ", 0.1f);
+            terminal.AddLine("M A S T E R   C O D E", 1);
+            terminal.AddLine(GetCode(), 2);
             
             // First puzzle dialog
             NextPuzzle();
@@ -84,30 +84,30 @@ namespace Game {
             Puzzle nextPuzzle = puzzles[puzzleIndex];
 
             // Show the puzzle number
-            terminalController.AddLine(" ", 2);
-            terminalController.AddLine(ConvertNumberToWrittenNumber(puzzleCounter) + " puzzle - " + nextPuzzle.name, 0.5f);
+            terminal.AddLine(" ", 0.1f);
+            terminal.AddLine(ConvertNumberToWrittenNumber(puzzleCounter) + " puzzle - " + nextPuzzle.name, 0.5f);
             
             // Show the puzzle description
-            terminalController.AddLine("Description: " + nextPuzzle.description, 2);
+            terminal.AddLine("Description: " + nextPuzzle.description, 2);
             
             // Show a countdown
-            terminalController.AddLine(" ", 0.1f);
-            terminalController.AddLine("Ready?", 3);
-            terminalController.AddLine("3", 1);
-            terminalController.AddLine("2", 1);
-            terminalController.AddLine("1", 1);
+            terminal.AddLine(" ", 0.1f);
+            terminal.AddLine("Ready?", 3);
+            terminal.AddLine("3", 1);
+            terminal.AddLine("2", 1);
+            terminal.AddLine("1", 1);
             
             UnityEvent onPuzzleStartEvent = new UnityEvent();
             onPuzzleStartEvent.AddListener(FadeScreenIn);
             onScreenFadedInEvent.AddListener(() => {
                 OnPuzzleStartEvent(nextPuzzle);
             });
-            terminalController.AddLine("0", 1, onPuzzleStartEvent);
+            terminal.AddLine("0", 1, onPuzzleStartEvent);
         }
 
         private void OnPuzzleStartEvent(Puzzle nextPuzzle) {
             // Hide the terminal
-            terminalController.gameObject.SetActive(false);
+            terminal.gameObject.SetActive(false);
             
             // Check whether the should be spawn in the UI or not 
             bool isUiBased = nextPuzzle.prefab.GetComponent<RectTransform>() != null;
@@ -127,24 +127,24 @@ namespace Game {
             onScreenFadedInEvent.RemoveAllListeners();
             onScreenFadedInEvent.AddListener(() => {
                 // Destroy the puzzle and show the terminal
-                terminalController.gameObject.SetActive(true);
+                terminal.gameObject.SetActive(true);
                 Destroy(puzzleObject);
             
                 // Show some spaces first
-                terminalController.AddLine(" ", 0.1f);
-                terminalController.AddLine(" ", 0.1f);
-                terminalController.AddLine(" ", 0.1f);
+                terminal.AddLine(" ", 0.1f);
+                terminal.AddLine(" ", 0.1f);
+                terminal.AddLine(" ", 0.1f);
             
                 // Show the dialog for when a puzzle has been completed
-                terminalController.AddLine("Excellent", 0.5f);
-                terminalController.AddLine("You managed to solve the puzzle", 0.5f);
-                terminalController.AddLine("Let's take a look at our code fragment", 2);
-                terminalController.AddLine("...", 2);
-                terminalController.AddLine(" ", 0.1f);
+                terminal.AddLine("Excellent", 0.5f);
+                terminal.AddLine("You managed to solve the puzzle", 0.5f);
+                terminal.AddLine("Let's take a look at our code fragment", 2);
+                terminal.AddLine("...", 2);
+                terminal.AddLine(" ", 0.1f);
             
                 // Show the master code
-                terminalController.AddLine("M A S T E R   C O D E", 1);
-                terminalController.AddLine(GetCode(), 0);
+                terminal.AddLine("M A S T E R   C O D E", 1);
+                terminal.AddLine(GetCode(), 0);
 
                 // If the code is not completed, show the dialog for the start of the next puzzle
                 if (puzzleCounter < codeLength) {
@@ -157,8 +157,21 @@ namespace Game {
         }
 
         private void GameEnd() {
-            terminalController.AddLine(" ", 0.1f);
-            terminalController.AddLine("GAME END - SOME COOL STORY DIALOG HERE", 0.5f);
+            terminal.AddLine(" ", 0.1f);
+            terminal.AddLine(" ", 0.1f);
+            terminal.AddLine(" ", 0.1f);
+            terminal.AddLine("You've done it ...", 0.5f);
+            terminal.AddLine("You stopped something very bad from happening", 2f);
+            terminal.AddLine("I knew we could count on you", 0.5f);
+            terminal.AddLine("We couldn't have done it without you", 0.5f);
+            terminal.AddLine("Now ...", 0.5f);
+            terminal.AddLine("Get some rest, you have earned it", 2f);
+            terminal.AddLine("If you don't mind, I have got to go", 0.5f);
+            terminal.AddLine("There are still a lot of people out there", 0.5f);
+            terminal.AddLine("I just hope it's not to late ...", 0.5f);
+            terminal.AddLine("...", 2f);
+            terminal.AddLine("...", 2f);
+            terminal.AddLine("...", 2f);
         }
         
         /// <summary>
