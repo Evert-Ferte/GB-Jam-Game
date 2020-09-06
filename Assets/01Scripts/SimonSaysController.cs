@@ -43,7 +43,7 @@ public class SimonSaysController : MonoBehaviour
 				else
 				{
 					// Game Finished!
-					Debug.Log("Game Finished!");
+					// Debug.Log("Game Finished!");
 					// Debug.Break();
 
 					FindObjectOfType<GameManager>().PuzzleEnd(this.gameObject);

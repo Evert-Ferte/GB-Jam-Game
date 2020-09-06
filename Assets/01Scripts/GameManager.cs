@@ -52,22 +52,22 @@ namespace Game {
         /// </summary>
         private void PlayStartSequence() {
             // Starting dialog
-            terminal.AddLine("...", 2);
-            terminal.AddLine("...", 2);
-            terminal.AddLine("...", 3);
+            terminal.AddLine("...", 2f);
+            terminal.AddLine("...", 2f);
+            terminal.AddLine("...", 3f);
             terminal.AddLine("I see you're finally awake", 0.5f);
             terminal.AddLine("It's been a while", 0.5f);
             terminal.AddLine("A lot happened while you were gone", 0.5f);
             terminal.AddLine("You better get going solving the master code", 0.5f);
             terminal.AddLine("You are our only hope ...", 2f);
             terminal.AddLine(" ", 0.1f);
-            terminal.AddLine("Good luck", 1);
-            terminal.AddLine("God speed", 2);
+            terminal.AddLine("Good luck", 1f);
+            terminal.AddLine("God speed", 2f);
             terminal.AddLine(" ", 0.1f);
             terminal.AddLine(" ", 0.1f);
             terminal.AddLine(" ", 0.1f);
-            terminal.AddLine("M A S T E R   C O D E", 1);
-            terminal.AddLine(GetCode(), 2);
+            terminal.AddLine("M A S T E R   C O D E", 1f);
+            terminal.AddLine(GetCode(), 2f);
             
             // First puzzle dialog
             NextPuzzle();
@@ -106,6 +106,10 @@ namespace Game {
         }
 
         private void OnPuzzleStartEvent(Puzzle nextPuzzle) {
+            // BUG - TEMP fix for a bug ...
+            AudioController ac = FindObjectOfType<AudioController>();
+            if (ac) ac.Stop();
+            
             // Hide the terminal
             terminal.gameObject.SetActive(false);
             

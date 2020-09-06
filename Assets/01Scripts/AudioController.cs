@@ -21,7 +21,17 @@ namespace Game {
             play = true;
             
             // Stop the current audio
-            StartCoroutine(FadeToNewClip(clip, loop));
+            // StartCoroutine(FadeToNewClip(clip, loop));
+            
+            source.Stop();
+            
+            // Prepare the new audio clip
+            source.clip = clip;
+            source.volume = origVolume;
+            source.loop = loop;
+            
+            // Play the new audio clip
+            source.Play();
         }
 
         public void Stop() {

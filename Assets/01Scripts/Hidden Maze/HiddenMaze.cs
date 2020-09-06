@@ -88,7 +88,7 @@ public class HiddenMaze : MonoBehaviour
         if (playerPosition == finnish)
         {
             // Finnish found...
-            FindObjectOfType<Game.GameManager>().PuzzleEnd(this.transform.parent.gameObject);
+            FindObjectOfType<Game.GameManager>().PuzzleEnd(this.transform.gameObject);
         }
         else if (!FalidTile())
         {

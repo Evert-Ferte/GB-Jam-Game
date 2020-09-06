@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Simon Says
   m_EditorClassIdentifier: 
   name: Simon Says
-  description: Pay close attention to the color pattern and then copy it.
+  description: Pay close attention to the pattern and then copy it.
   prefab: {fileID: 1019726572781806029, guid: aa666aa82832a19478194ca198cbef1b, type: 3}
