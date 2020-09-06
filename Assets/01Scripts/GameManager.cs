@@ -99,9 +99,7 @@ namespace Game {
             
             UnityEvent onPuzzleStartEvent = new UnityEvent();
             onPuzzleStartEvent.AddListener(FadeScreenIn);
-            onScreenFadedInEvent.AddListener(() => {
-                OnPuzzleStartEvent(nextPuzzle);
-            });
+            onScreenFadedInEvent.AddListener(() => { OnPuzzleStartEvent(nextPuzzle); });
             terminal.AddLine("0", 1, onPuzzleStartEvent);
         }
 
@@ -128,6 +126,7 @@ namespace Game {
             // Play the fade in animation
             FadeScreenIn();
             
+            // onScreenFadedInEvent = new UnityEvent();
             onScreenFadedInEvent.RemoveAllListeners();
             onScreenFadedInEvent.AddListener(() => {
                 // Destroy the puzzle and show the terminal
@@ -135,7 +134,7 @@ namespace Game {
                 Destroy(puzzleObject);
             
                 // Show some spaces first
-                terminal.AddLine(" ", 0.1f);
+                terminal.AddLine(" ", 0.5f);
                 terminal.AddLine(" ", 0.1f);
                 terminal.AddLine(" ", 0.1f);
             
@@ -146,17 +145,22 @@ namespace Game {
                 terminal.AddLine("...", 2);
                 terminal.AddLine(" ", 0.1f);
             
+                UnityEvent e = new UnityEvent();
+                e.AddListener(() => {
+                    onScreenFadedInEvent.RemoveAllListeners();
+                    
+                    // If the code is not completed, show the dialog for the start of the next puzzle
+                    if (puzzleCounter < codeLength) {
+                        NextPuzzle();
+                        return;
+                    }
+            
+                    GameEnd();
+                });
+
                 // Show the master code
                 terminal.AddLine("M A S T E R   C O D E", 1);
-                terminal.AddLine(GetCode(), 0);
-
-                // If the code is not completed, show the dialog for the start of the next puzzle
-                if (puzzleCounter < codeLength) {
-                    NextPuzzle();
-                    return;
-                }
-            
-                GameEnd();
+                terminal.AddLine(GetCode(), 2, e);
             });
         }
 

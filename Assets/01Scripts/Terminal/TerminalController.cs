@@ -36,8 +36,6 @@ namespace Game.Terminal {
         /// <param name="waitTime">The amount of time to wait after the line has been completed.</param>
         /// <param name="lineEvent">Possible events to run after the line has been shown and the amount waited.</param>
         public void AddLine(string newLine, float waitTime, UnityEvent lineEvent = null) {
-            Debug.LogError("ADDED LINE - " + newLine);
-            
             jobQueue.Add(new Job(newLine, waitTime, lineEvent));
             NewLine(jobQueue[0]);
         }
@@ -50,8 +48,6 @@ namespace Game.Terminal {
         /// <param name="waitTime">the amount of time to wait after the line has been completed.</param>
         /// <param name="lineEvent">Possible events to run after the line has been shown and the amount waited.</param>
         public void ForceAddLine(string newLine, float waitTime, UnityEvent lineEvent = null) {
-            Debug.LogError("FORCE ADDED LINE - " + newLine);
-            
             isWorking = false;
             jobQueue.Insert(0, new Job(newLine, waitTime, lineEvent));
             NewLine(jobQueue[0]);
@@ -66,8 +62,6 @@ namespace Game.Terminal {
             if (isWorking)
                 return;
             isWorking = true;
-            
-            Debug.LogError("START NEW LINE - " + lineJob.text);
 
             // Play the typing audio
             if (audioController)
